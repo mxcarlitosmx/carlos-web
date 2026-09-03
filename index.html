@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio | Carlos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= PALETA Y FONDO ================= */
+        :root {
+            --bg-base: #03050a;
+            --accent-cyan: #00e5ff;
+            --accent-blue: #0f4cff;
+            --accent-purple: #4a00e0;
+            --text-main: #f0f4f8;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ================= FONDO ESTILO AURORA / GLOW ================= */
+        .bg-glow-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.6;
+        }
+
+        .glow-orb.orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--accent-purple); }
+        .glow-orb.orb-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: var(--accent-cyan); opacity: 0.4; }
+        .glow-orb.orb-3 { top: 20%; left: 40%; width: 40vw; height: 40vw; background: var(--accent-blue); opacity: 0.5; }
+
+        h1, h2, h3, h4 { color: #ffffff; font-weight: 700; letter-spacing: -0.5px; }
+        .display-3 { font-weight: 800; }
+
+        .text-accent {
+            background: linear-gradient(90deg, var(--accent-cyan), #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        section {
+            padding: 100px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ================= BOTONES FLOTANTES ================= */
+        .floating-container {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1000;
+        }
+        .floating-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: rgba(3, 5, 10, 0.6);
+            border: 2px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+        }
+        .floating-btn:hover {
+            background: var(--accent-cyan);
+            color: var(--bg-base);
+            transform: scale(1.2) translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.6);
+        }
+
+        /* ================= PERFIL ================= */
+        .profile-img {
+            width: 260px;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.1);
+            background-color: var(--bg-base);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.2);
+        }
+        .social-links a {
+            color: var(--text-main);
+            font-size: 28px;
+            margin-right: 15px;
+            transition: 0.3s;
+        }
+        .social-links a:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
+            transform: translateY(-3px);
+            display: inline-block;
+        }
+
+        /* ================= TARJETAS (Glassmorphism) ================= */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            height: 100%;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 229, 255, 0.2);
+        }
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Para tus FOTOS (Pasatiempos y Criptografía) */
+        .card-img-custom {
+            width: 100%;
+            height: 240px; /* Aumentamos la altura para que la foto se vea mucho más grande */
+            object-fit: contain; /* Mantiene la foto completa sin recortar */
+            background-color: rgba(0, 0, 0, 0.2); /* Fondo oscuro sutil para que los bordes se mezclen con la tarjeta */
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Para los LOGOS de las escuelas (Formación Académica) */
+        .card-img-logo {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            background-color: #ffffff; /* Conservamos el fondo blanco para que los logos no se pierdan */
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* ================= FILAS DE PROYECTOS ================= */
+        .project-row {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-left: 5px solid transparent;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px 15px 15px 10px;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        .project-row::after {
+            content: ''; position: absolute; left: -1px; top: 0; height: 100%; width: 5px;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
+            border-radius: 10px 0 0 10px;
+            transition: 0.4s;
+        }
+        .project-row:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(15px);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        /* ================= BOTONES FINALES ================= */
+        .btn-custom {
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+        .btn-solid {
+            background: var(--text-main);
+            color: var(--bg-base);
+            border: none;
+        }
+        .btn-solid:hover {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+            transform: translateY(-3px);
+            color: var(--bg-base);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: white;
+            transform: translateY(-3px);
+        }
+        
+        .text-muted { color: #a0abbd !important; font-weight: 300; }
+        p { font-weight: 300; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <div class="floating-container d-none d-md-flex">
+        <a href="archivos/CV.pdf" download class="floating-btn" title="Descargar CV">
+            <i class="fa-solid fa-file-pdf"></i>
+        </a>
+        <a href="archivos/llave_publica.asc" download class="floating-btn" title="Llave Pública">
+            <i class="fa-solid fa-key"></i>
+        </a>
+    </div>
+
+    <section id="perfil" class="container">
+        <div class="row align-items-center min-vh-75 mt-5">
+            <div class="col-md-4 text-center mb-5 mb-md-0">
+                <img src="img/yo.jpeg" alt="Mi Foto" class="profile-img">
+            </div>
+            <div class="col-md-8 text-center text-md-start">
+                <div class="social-links mb-3">
+                    <a href="https://github.com/mxcarlitosmx" target="_blank"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/jose-carlos-hernandez-perez" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+                <h1 class="display-3">José Carlos Hernández Pérez</h1>
+                <h3 class="text-accent mb-4">Ingeniero en Sistemas Computacionales</h3>
+                <p class="lead" style="line-height: 1.8;">
+                    Estudiante de séptimo semestre de Ingeniería en Sistemas Computacionales en la Escuela Superior de Cómputo del Instituto Politécnico Nacional (ESCOM-IPN). Soy una persona autodidacta y proactiva, con gran disposición para aprender nuevas tecnologías. Me enfoco en resolver problemas de manera eficiente e innovadora.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="formacion" class="container">
+        <h2 class="mb-5 text-center">Formación Académica</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/fran.jpg" alt="Secundaria" class="card-img-logo">
+                    <h4 class="mb-3">Secundaria</h4>
+                    <p class="text-accent mb-2">Francisco Gonzalez Bocanegra</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/cetis33.jpg" alt="Bachillerato" class="card-img-logo">
+                    <h4 class="mb-3">Bachillerato</h4>
+                    <p class="text-accent mb-2">CETIS 33</p>
+                    <p class="text-muted">Administración de Recursos Humanos</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/escudoESCOM.jpg" alt="Universidad" class="card-img-logo">
+                    <h4 class="mb-3">Universidad</h4>
+                    <p class="text-accent mb-2">Escuela Superior de Cómputo (ESCOM-IPN)</p>
+                    <p class="text-muted">Ingeniería en Sistemas Computacionales</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="proyectos" class="container">
+        <h2 class="mb-3 text-center">Portafolio y Proyectos</h2>
+        <div class="text-center mb-5">
+            <p>Para conocer el código fuente y la documentación de mis proyectos, visita mi repositorio de GitHub: <a href="https://github.com/mxcarlitosmx" target="_blank" class="text-accent text-decoration-none">github.com/mxcarlitosmx</a></p>
+        </div>
+        
+        <div class="project-row">
+            <h4>Arquitectura de Tres Capas en la Nube</h4>
+            <p class="mb-0 text-muted">Diseñé e implementé la lógica del backend para una arquitectura web de tres capas, incorporando una base de datos relacional y desplegando la infraestructura en la nube.</p>
+        </div>
+        
+        <div class="project-row">
+            <h4>Sanatorio San Carlos (Sistema Hospitalario en la Nube)</h4>
+            <p class="mb-0 text-muted">Desarrollé y desplegué en Microsoft Azure una plataforma web integral con arquitectura MVC, utilizando Laravel 12 y MySQL.</p>
+        </div>
+        
+        <div class="project-row">
+            <h4>Daily Memory (Plataforma de Entrenamiento Cognitivo)</h4>
+            <p class="mb-0 text-muted">Desarrollé una plataforma web interactiva en Laravel enfocada en el entrenamiento cognitivo, mediante juegos diseñados para ejercitar la memoria y la agilidad mental.</p>
+        </div>
+        
+        <div class="project-row">
+            <h4>Motor de Cifrado por Bloques (TBC)</h4>
+            <p class="mb-0 text-muted">Programé en C un algoritmo criptográfico de cifrado por bloques enfocado en el procesamiento de datos a bajo nivel.</p>
+        </div>
+    </section>
+
+    <section id="pasatiempos" class="container">
+        <h2 class="mb-5 text-center">Pasatiempos Favoritos</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/mates.jpg" alt="Matemáticas y Programación" class="card-img-custom">
+                    <h4>Matemáticas y Programación</h4>
+                    <p class="text-muted mt-3">Me apasiona el reto intelectual que ofrece la programación. Disfruto encontrar el camino lógico para resolver problemas matemáticos complejos y optimizar algoritmos a través de código limpio.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/cruz.jpg" alt="Fútbol" class="card-img-custom">
+                    <h4>Fútbol</h4>
+                    <p class="text-muted mt-3">Me gusta mucho el fútbol, tanto verlo como jugarlo en la cancha. Es un deporte que me ha enseñado sobre disciplina, estrategia rápida y la importancia de trabajar en equipo. Mi equipo preferido es el CRUZ AZUL</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/ale.jpg" alt="Escuchar Música" class="card-img-custom">
+                    <h4>Escuchar Música</h4>
+                    <p class="text-muted mt-3">Al igual disfruto mucho escuchar música. Mi genero favorito de musica es el RAP, y mi cantanate favorito es Alemán</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="criptografia" class="container">
+        <h2 class="mb-5 text-center">Sobre Criptografía</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/eucli.png" alt="Algoritmo de Euclides" class="card-img-custom border border-info">
+                    <h4>Algoritmo Extendido de Euclides</h4>
+                    <p class="text-muted mt-3">Se utiliza para calcular el máximo común divisor y los coeficientes de Bézout. En criptografía, su aplicación estrella es encontrar el inverso multiplicativo modular, un pilar para la generación de llaves en algoritmos como RSA.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    
+                    <a href="https://youtu.be/EQsHGbp3TGc" target="_blank" title="Ver video en YouTube">
+                        <img src="https://img.youtube.com/vi/EQsHGbp3TGc/hqdefault.jpg" alt="Simétrica vs Asimétrica" class="card-img-custom">
+                    </a>
+                    
+                    <h4>Simétrica vs Asimétrica</h4>
+                    <p class="text-muted mt-3">La simétrica usa la misma llave para cifrar y descifrar, destacando en gran rendimiento. La asimétrica resuelve la inseguridad de distribuir llaves usando un par (pública y privada), a cambio de requerir más poder de cómputo.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <img src="img/blum.png" alt="Manuel Blum" class="card-img-custom">
+                    <h4>Manuel Blum</h4>
+                    <p class="text-muted mt-3">Es un reconocido informático teórico ganador del Premio Turing en 1995. Sus investigaciones cimentaron las bases matemáticas de la teoría de la complejidad computacional, con un impacto crucial en la criptografía moderna.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="descargas" class="container text-center pb-5">
+        <h2 class="mb-5">Documentos Disponibles</h2>
+        <div class="d-flex justify-content-center gap-4 flex-wrap">
+            <a href="archivos/CV_Carlos_Hernandez.pdf" download class="btn-custom btn-solid">
+                <i class="fa-solid fa-file-pdf"></i> Descargar Currículum
+            </a>
+            <a href="archivos/llave_publica_carlos.txt" download class="btn-custom btn-outline">
+                <i class="fa-solid fa-key"></i> Descargar Llave Pública
+            </a>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
